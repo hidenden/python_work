@@ -1,16 +1,12 @@
 #!/usr/bin/env python3
 
-from curses.ascii import NUL
 import sys
 import getopt
 import os
 import re
 import subprocess
 from typing import Dict
-from typing import Tuple
 from typing import List
-
-from pytest import fail
 
 
 # オプション
