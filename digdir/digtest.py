@@ -40,12 +40,12 @@ ESC_GREEN = '\033[32m'
 ESC_END = '\033[0m'
     
 def showhow():
-    print("digtest.py [-v|-s] [-o outfile] [-d <topdir>] [test_name...]")
+    print("digtest.py [-v|-s] [-o outfile] [-d <topdir>] [test名...]")
     print("  -d: テストトップディレクト｡ 指定がない場合はカレントディレクトリ")
-    print("  -v: verbose mode")
-    print("  -s: silent mode")
-    print("  -o: テスト結果をファイルに出力する")
-    print("  test_name: 実施対象テスト(例 tst_owners)｡ 省略時は全て実施")
+    print("  -v: テストツールを-v付きで実行する")
+    print("  -s: サイレントモード｡異常があるときだけ知らせる")
+    print("  -o: テスト実行結果をファイルに出力する")
+    print("  test名: 実施対象テスト(例 tst_owners)｡ 省略時は全て実施")
     sys.exit(1)
 
 def load_option(v:List[str]) -> Dict[str,str]:
@@ -91,6 +91,11 @@ def dig_testdir(tname:str, mode:str, outbuf:List, failbuf:List):
     testdirs.sort()
     for td in testdirs:
         os.chdir(td)
+        if not os.path.exists("runner.rego"):
+            dig_testdir(td, mode, outbuf, failbuf)
+            os.chdir("..")
+            continue
+
         invoke_test(td, mode, outbuf, failbuf)
         os.chdir("..")
     if mode != "s":
